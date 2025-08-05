@@ -1,3 +1,5 @@
+# scripts/encode_dna.py
+
 from Bio import SeqIO
 import os
 import numpy as np
@@ -34,12 +36,31 @@ def encode_kmer_batch(sequences, k=3):
         features.append([vec.get(kmer, 0.0) for kmer in all_kmers])
     return np.array(features), all_kmers
 
-def one_hot_encode(sequences):
-    """Converts sequences to one-hot encoding (for CNNs)."""
-    encoder = OneHotEncoder(handle_unknown='ignore')
-    flattened = [list(seq) for seq in sequences]
-    encoded = encoder.fit_transform(flattened).toarray()
-    return encoded
+def one_hot_encode(sequences, pad_char="N"):
+    """
+    Fully manual one-hot encoder that avoids sklearn. Output shape: (N, L, 5)
+    """
+    # Allowed nucleotides + padding symbol
+    vocab = ['A', 'C', 'G', 'T', pad_char]
+    vocab_dict = {ch: i for i, ch in enumerate(vocab)}
+
+    # Convert all sequences to strings
+    sequences = [str(seq) for seq in sequences]
+    max_len = max(len(seq) for seq in sequences)
+
+    # Pad sequences to equal length
+    padded = [seq.ljust(max_len, pad_char) for seq in sequences]
+
+    # Prepare one-hot matrix
+    N = len(padded)
+    one_hot = np.zeros((N, max_len, len(vocab)), dtype=np.uint8)
+
+    for i, seq in enumerate(padded):
+        for j, char in enumerate(seq):
+            idx = vocab_dict.get(char.upper(), vocab_dict[pad_char])
+            one_hot[i, j, idx] = 1
+
+    return one_hot
 
 def save_numpy_array(data, filepath):
     """Saves encoded data as .npy"""
