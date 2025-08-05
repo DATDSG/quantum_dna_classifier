@@ -4,7 +4,6 @@ from Bio import SeqIO
 import os
 import numpy as np
 from collections import Counter
-from sklearn.preprocessing import OneHotEncoder
 
 def read_fasta(file_path):
     """Reads a FASTA file and returns a list of sequences."""
@@ -38,29 +37,26 @@ def encode_kmer_batch(sequences, k=3):
 
 def one_hot_encode(sequences, pad_char="N"):
     """
-    Fully manual one-hot encoder that avoids sklearn. Output shape: (N, L, 5)
+    One-hot encodes sequences to shape (N, L, 5).
+    Does NOT use sklearn. Pure NumPy solution.
     """
-    # Allowed nucleotides + padding symbol
     vocab = ['A', 'C', 'G', 'T', pad_char]
     vocab_dict = {ch: i for i, ch in enumerate(vocab)}
 
-    # Convert all sequences to strings
-    sequences = [str(seq) for seq in sequences]
+    # Ensure string format and uppercase
+    sequences = [str(seq).upper() for seq in sequences]
     max_len = max(len(seq) for seq in sequences)
+    padded_seqs = [seq.ljust(max_len, pad_char) for seq in sequences]
 
-    # Pad sequences to equal length
-    padded = [seq.ljust(max_len, pad_char) for seq in sequences]
-
-    # Prepare one-hot matrix
-    N = len(padded)
+    N = len(padded_seqs)
     one_hot = np.zeros((N, max_len, len(vocab)), dtype=np.uint8)
 
-    for i, seq in enumerate(padded):
-        for j, char in enumerate(seq):
-            idx = vocab_dict.get(char.upper(), vocab_dict[pad_char])
-            one_hot[i, j, idx] = 1
+    for i, seq in enumerate(padded_seqs):
+        for j, ch in enumerate(seq):
+            one_hot[i, j, vocab_dict.get(ch, vocab_dict[pad_char])] = 1
 
     return one_hot
+
 
 def save_numpy_array(data, filepath):
     """Saves encoded data as .npy"""
