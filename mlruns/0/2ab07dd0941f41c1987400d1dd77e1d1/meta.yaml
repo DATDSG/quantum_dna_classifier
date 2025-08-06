@@ -1,0 +1,14 @@
+artifact_uri: file:///c:/Users/td123/OneDrive/Documents/GitHub/quantum_dna_classifier/mlruns/0/2ab07dd0941f41c1987400d1dd77e1d1/artifacts
+end_time: 1754478734946
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 2ab07dd0941f41c1987400d1dd77e1d1
+run_name: RF_Fold_4
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1754478732699
+status: 3
+tags: []
+user_id: td123

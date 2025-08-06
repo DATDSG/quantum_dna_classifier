@@ -1,0 +1,10 @@
+artifact_location: file:///c:/Users/td123/OneDrive/Documents/GitHub/quantum_dna_classifier/mlruns/0/models/m-248db8a1d155463997446771473174c2/artifacts
+creation_timestamp: 1754478644739
+experiment_id: '0'
+last_updated_timestamp: 1754478646739
+model_id: m-248db8a1d155463997446771473174c2
+model_type: null
+name: model
+source_run_id: 3699b3ddaa52400e91bd69de0ab2b2a5
+status: 2
+status_message: null

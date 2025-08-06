@@ -1,0 +1,14 @@
+artifact_uri: file:///c:/Users/td123/OneDrive/Documents/GitHub/quantum_dna_classifier/mlruns/0/2539cfd5eefb44fcb615d86357679965/artifacts
+end_time: 1754478637889
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 2539cfd5eefb44fcb615d86357679965
+run_name: SVM_Fold_3
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1754478635828
+status: 3
+tags: []
+user_id: td123

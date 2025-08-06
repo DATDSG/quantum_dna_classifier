@@ -1,0 +1,14 @@
+artifact_uri: file:///c:/Users/td123/OneDrive/Documents/GitHub/quantum_dna_classifier/mlruns/0/6f68ddb2fea54219a2cc0ba3a4ec5d1f/artifacts
+end_time: 1754478747146
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 6f68ddb2fea54219a2cc0ba3a4ec5d1f
+run_name: CNN_OneHot
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1754478739127
+status: 3
+tags: []
+user_id: td123

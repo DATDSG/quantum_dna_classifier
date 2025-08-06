@@ -1,0 +1,22 @@
+artifact_path: file:///c:/Users/td123/OneDrive/Documents/GitHub/quantum_dna_classifier/mlruns/0/models/m-b8e9b906756548219d782606db4b007b/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.9.23
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.6.1
+mlflow_version: 3.1.4
+model_id: m-b8e9b906756548219d782606db4b007b
+model_size_bytes: 111411
+model_uuid: m-b8e9b906756548219d782606db4b007b
+prompts: null
+run_id: 303367ca9bc64f28afa4d009a5ef0508
+utc_time_created: '2025-08-06 11:10:25.162594'
