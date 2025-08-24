@@ -1,97 +1,126 @@
-# scripts/encode_dna.py
+#!/usr/bin/env python
+# Build one-hot, k-mer, and angle encodings. Idempotent; CPU-only.
+from __future__ import annotations
+import argparse, yaml, json, os, re
+from pathlib import Path
+from typing import Dict
 
-from Bio import SeqIO
-import os
 import numpy as np
-from collections import Counter
+from sklearn.feature_extraction.text import TfidfTransformer
+from sklearn.preprocessing import normalize
 
-def read_fasta(file_path):
-    """
-    Reads a FASTA file and returns a list of DNA sequences as strings.
-    """
-    return [str(record.seq) for record in SeqIO.parse(file_path, "fasta")]
+def load_yaml(p: str) -> dict:
+    return yaml.safe_load(open(p, "r", encoding="utf-8"))
 
-def filter_short_sequences(sequences, min_length=30):
-    """
-    Removes sequences shorter than min_length.
-    Useful to clean up raw or partial entries.
-    """
-    return [seq for seq in sequences if len(seq) >= min_length]
+def set_seeds(seed: int) -> None:
+    os.environ["PYTHONHASHSEED"] = str(seed)
+    import random
+    random.seed(seed); np.random.seed(seed)
 
-def kmer_encoding(sequence, k=3):
-    """
-    Converts a DNA sequence into a dictionary of k-mer frequency values.
-    """
-    kmers = [sequence[i:i+k] for i in range(len(sequence) - k + 1)]
-    count = Counter(kmers)
-    total = sum(count.values())
-    return {kmer: count[kmer] / total for kmer in count}
+def load_windows_labels(dcfg: dict) -> tuple[np.ndarray, np.ndarray]:
+    w = np.load(dcfg["output_files"]["windows_npy"], allow_pickle=True)
+    y = np.load(dcfg["output_files"]["labels_npy"])
+    return w, y
 
-def encode_kmer_batch(sequences, k=3):
-    """
-    Encodes a batch of sequences into k-mer frequency vectors.
-    Returns a NumPy array and the ordered k-mer vocabulary.
-    """
-    all_kmers = set()
-    encoded = []
+def one_hot_encode(wins: np.ndarray, alphabet: list[str], L: int, pad_value: int = 0) -> np.ndarray:
+    a2i = {ch: i for i, ch in enumerate(alphabet)}
+    X = np.full((len(wins), L, len(alphabet)), pad_value, dtype=np.float32)
+    for i, w in enumerate(wins):
+        s = w[:L]
+        for j, ch in enumerate(s):
+            idx = a2i.get(ch, None)
+            if idx is not None:
+                X[i, j, idx] = 1.0
+    return X
 
-    # First pass: get all k-mers in all sequences
-    for seq in sequences:
-        vec = kmer_encoding(seq, k)
-        all_kmers.update(vec.keys())
-        encoded.append(vec)
+def kmer_counts(w: str, k: int, alphabet=("A","C","G","T")) -> dict:
+    cnt = {}
+    for i in range(0, len(w)-k+1):
+        s = w[i:i+k]
+        if re.search(rf"[^{''.join(alphabet)}]", s): continue
+        cnt[s] = cnt.get(s, 0) + 1
+    return cnt
 
-    all_kmers = sorted(all_kmers)  # consistent feature order
+def build_kmer_matrix(wins: np.ndarray, k: int) -> tuple[np.ndarray, list[str]]:
+    # Build vocabulary across corpus
+    vocab = {}
+    rows = []
+    for w in wins:
+        cnt = kmer_counts(w, k)
+        rows.append(cnt)
+        for kmer in cnt.keys():
+            if kmer not in vocab: vocab[kmer] = len(vocab)
+    X = np.zeros((len(wins), len(vocab)), dtype=np.float32)
+    for i, cnt in enumerate(rows):
+        for kmer, c in cnt.items():
+            X[i, vocab[kmer]] = float(c)
+    vocab_list = [None]*len(vocab)
+    for kmer, idx in vocab.items():
+        vocab_list[idx] = kmer
+    return X, vocab_list
 
-    # Second pass: fill vectors
-    features = []
-    for vec in encoded:
-        features.append([vec.get(kmer, 0.0) for kmer in all_kmers])
+def scale_features(X: np.ndarray, mode: str) -> np.ndarray:
+    if mode == "tfidf":
+        tfidf = TfidfTransformer(norm=None, use_idf=True, smooth_idf=True)
+        X = tfidf.fit_transform(X).astype(np.float32).toarray()
+        X = normalize(X, norm="l2").astype(np.float32)
+    elif mode == "l2":
+        X = normalize(X, norm="l2").astype(np.float32)
+    return X
 
-    return np.array(features), all_kmers
+def angles_from_features(X: np.ndarray, clip: tuple[float,float], scale: str) -> np.ndarray:
+    lo, hi = clip
+    Xc = np.clip(X, lo, hi)
+    if scale == "pi":
+        # map to [0, π]
+        Xn = (Xc - lo) / (hi - lo + 1e-9)
+        return (np.pi * Xn).astype(np.float32)
+    return Xc.astype(np.float32)
 
-def one_hot_encode(sequences, pad_char="N", pad_to="max"):
-    """
-    One-hot encodes sequences into NumPy array shape (N, L, 5),
-    where L is length of longest or median sequence (for padding).
-    
-    Parameters:
-        sequences: list of DNA strings
-        pad_char: character to pad with (usually 'N')
-        pad_to: either "max" or "median" to determine padding length
-    """
-    vocab = ['A', 'C', 'G', 'T', pad_char]
-    vocab_dict = {ch: i for i, ch in enumerate(vocab)}
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--encoding-config", required=True)
+    ap.add_argument("--data-config", required=True)
+    args = ap.parse_args()
 
-    # Ensure all uppercase strings
-    sequences = [str(seq).upper() for seq in sequences]
+    ecfg = load_yaml(args.encoding_config)
+    dcfg = load_yaml(args.data_config)
+    set_seeds(int(ecfg["random_seed"]))
 
-    if pad_to == "median":
-        lengths = [len(seq) for seq in sequences]
-        target_len = int(np.median(lengths))
+    Path(dcfg["paths"]["processed_dir"]).mkdir(parents=True, exist_ok=True)
+    wins, y = load_windows_labels(dcfg)
+
+    # one-hot
+    if ecfg["one_hot"]["enabled"]:
+        L = int(ecfg["one_hot"]["max_len"])
+        X_oh = one_hot_encode(wins, ecfg["one_hot"]["alphabet"], L, ecfg["one_hot"]["pad_value"])
+        np.save(Path(dcfg["paths"]["processed_dir"]) / f"onehot_L{L}.npy", X_oh)
+
+    # k-mer
+    if ecfg["kmer"]["enabled"]:
+        k = int(ecfg["kmer"]["k"])
+        X_kmer, vocab = build_kmer_matrix(wins, k)
+        X_kmer = scale_features(X_kmer, str(ecfg["kmer"]["normalize"]))
+        np.save(Path(dcfg["paths"]["processed_dir"]) / f"kmer_k{k}.npy", X_kmer)
+        (Path(dcfg["paths"]["metadata_dir"]) / f"kmer_k{k}_vocab.json").write_text(json.dumps(vocab, indent=2), encoding="utf-8")
+
+    # angle encoding (from k-mer by default)
+    src = ecfg["angle_encoding"].get("source", "kmer")
+    if src == "kmer":
+        k = int(ecfg["kmer"]["k"])
+        X = np.load(Path(dcfg["paths"]["processed_dir"]) / f"kmer_k{k}.npy")
     else:
-        target_len = max(len(seq) for seq in sequences)
+        # fallback to flattened one-hot average
+        L = int(ecfg["one_hot"]["max_len"])
+        X = np.load(Path(dcfg["paths"]["processed_dir"]) / f"onehot_L{L}.npy")
+        X = X.mean(axis=1)  # (N,4)
+    clip = (float(ecfg["angle_encoding"]["feature_clip"]["min"]),
+            float(ecfg["angle_encoding"]["feature_clip"]["max"]))
+    Xang = angles_from_features(X, clip, str(ecfg["angle_encoding"]["scale"]))
+    np.save(Path(dcfg["paths"]["processed_dir"]) / "angles.npy", Xang)
 
-    # Pad or truncate sequences
-    padded = []
-    for seq in sequences:
-        if len(seq) > target_len:
-            padded.append(seq[:target_len])
-        else:
-            padded.append(seq.ljust(target_len, pad_char))
+    # labels are already in interim; no change
+    print("[OK] Encodings written to", dcfg["paths"]["processed_dir"])
 
-    # Convert to one-hot encoded array
-    N = len(padded)
-    one_hot = np.zeros((N, target_len, len(vocab)), dtype=np.uint8)
-
-    for i, seq in enumerate(padded):
-        for j, ch in enumerate(seq):
-            one_hot[i, j, vocab_dict.get(ch, vocab_dict[pad_char])] = 1
-
-    return one_hot
-
-def save_numpy_array(data, filepath):
-    """
-    Saves any NumPy array to .npy format.
-    """
-    np.save(filepath, data)
+if __name__ == "__main__":
+    main()

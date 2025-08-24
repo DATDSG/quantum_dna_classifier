@@ -1,0 +1,22 @@
+# Dashboard defaults – CPU-only friendly; adjust as needed.
+host: "127.0.0.1"
+port: 8050
+debug: false
+
+# Where to read local results/metrics and MLflow
+paths:
+  results_dir: "results"
+  metrics_dir: "results/metrics"
+  plots_dir: "results/plots"
+  reports_dir: "results/reports"
+  mlruns_dir: "results/logs/mlruns"   # MLflow file store
+
+mlflow:
+  tracking_uri: "file:results/logs/mlruns"
+  experiment_name: "Neem-DNA-QML"
+
+limits:
+  max_points_roc: 5000
+  max_points_pr: 5000
+  bootstrap_iters: 1000
+  seed: 42

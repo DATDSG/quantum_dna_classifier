@@ -1,0 +1,66 @@
+LOCUS       PV941837                 648 bp    DNA     linear   PLN 23-JUL-2025
+DEFINITION  Azadirachta indica isolate Z16 ribulose-1,5-bisphosphate
+            carboxylase/oxygenase large subunit (rbcL) gene, partial cds;
+            chloroplast.
+ACCESSION   PV941837
+VERSION     PV941837.1
+KEYWORDS    .
+SOURCE      chloroplast Azadirachta indica (neem)
+  ORGANISM  Azadirachta indica
+            Eukaryota; Viridiplantae; Streptophyta; Embryophyta; Tracheophyta;
+            Spermatophyta; Magnoliopsida; eudicotyledons; Gunneridae;
+            Pentapetalae; rosids; malvids; Sapindales; Meliaceae; Azadirachta.
+REFERENCE   1  (bases 1 to 648)
+  AUTHORS   Ahamed,Z., Mandal,S.K. and Ghosh,S.K.
+  TITLE     DNA Barcoding based validation of Marketed Plant Products
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 648)
+  AUTHORS   Ahamed,Z., Mandal,S.K. and Ghosh,S.K.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (15-JUL-2025) Department: Department of Ecological
+            Studies, Kalyani University and Inbol Healthcare, 28/2G Nb Lane,
+            Kolkata, West Bengal 700026, India
+COMMENT     ##Assembly-Data-START##
+            Sequencing Technology :: Sanger dideoxy sequencing
+            ##Assembly-Data-END##
+FEATURES             Location/Qualifiers
+     source          1..648
+                     /organism="Azadirachta indica"
+                     /organelle="plastid:chloroplast"
+                     /mol_type="genomic DNA"
+                     /isolate="Z16"
+                     /isolation_source="powder"
+                     /specimen_voucher="InBOL_Z16"
+                     /db_xref="taxon:124943"
+                     /geo_loc_name="India"
+                     /lat_lon="23.03 N 88.83 E"
+                     /collection_date="09-Feb-2022"
+                     /collected_by="Zisan Ahamed, Sushil Kumar Mandal, Sankar
+                     Kumar Ghosh"
+     gene            <1..>648
+                     /gene="rbcL"
+     CDS             <1..>648
+                     /gene="rbcL"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="ribulose-1,5-bisphosphate carboxylase/oxygenase
+                     large subunit"
+                     /protein_id="XXQ42434.1"
+                     /translation="LTYYTPDYVTKDTDILAAFRVTPQPGVPPEEAGAAVAAESSTGT
+                     WTTVWTDGLTSLDRYKGRCYNIEPVAGEENQYICYVAYPLDLFEEGSVTNMFTSIVGN
+                     VFGFKALRALRLEDLRIPPAYSKTFQGPPHGIQVERDKLNKYGRPLLGCTIKPKLGLS
+                     AKNYGRAVYECLRGGLDFTKDDENVNSQPFMRWRDRFLFCAEALYKAQAETGEIKG"
+ORIGIN      
+        1 ttgacttatt atactcctga ctatgtaacc aaagatactg atatcttggc agcattccga
+       61 gtaactcctc aaccaggagt tccgcccgag gaagcagggg ctgcggtagc tgcggaatct
+      121 tctactggta catggacaac tgtgtggacc gatgggctta ctagtcttga tcgttacaaa
+      181 ggacgatgct acaacattga gcccgttgct ggagaagaaa atcaatatat atgttatgta
+      241 gcttaccctt tagacctttt tgaagaaggt tctgttacta acatgtttac gtccattgtg
+      301 ggtaatgtat ttgggttcaa agccctgcgt gctctacgtc tagaggatct acgaatccct
+      361 cccgcgtatt ctaaaacttt ccaaggacca cctcatggga tccaagttga gagagataaa
+      421 ttgaacaagt atggccgtcc tctattggga tgtactatta aacctaaatt ggggttatcc
+      481 gctaagaatt acggtagagc tgtttatgaa tgtctacgcg gtggacttga ctttaccaaa
+      541 gatgatgaga acgtgaattc ccaaccattt atgcgttgga gagaccgttt cttattttgt
+      601 gcggaagcgc tctataaagc gcaagctgaa acaggtgaaa tcaaaggt
+//
+

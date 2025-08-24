@@ -1,0 +1,67 @@
+# Data pipeline config — aligns with preprocess_genbank.py, encode_dna.py, and training scripts.
+
+paths:
+  raw_dir: "data/raw"
+  interim_dir: "data/interim"
+  processed_dir: "data/processed"
+  embeddings_dir: "data/embeddings"
+  metadata_dir: "data/metadata"
+
+# Primary chloroplast genome (Neem)
+primary_accession: "KF986530.1"
+
+# Online fetch — or just place data/raw/KF986530.1.gb if you prefer offline.
+fetch:
+  enabled: true
+  email_env: "NCBI_EMAIL"      # REQUIRED if enabled; else drop the .gb in data/raw/
+  api_key_env: "NCBI_API_KEY"  # optional but faster
+  retries: 3
+  timeout_s: 30
+
+# Windowing must match your model input length; keep length == encoding.one_hot.max_len == cnn.max_len
+windowing:
+  length: 300
+  stride: 300
+  pad_char: "N"
+  uppercase: true
+  drop_ambiguous: true          # drop windows with too many non-ACGT
+  deduplicate: true             # remove duplicate windows
+
+# Binary labels: CDS vs (rRNA|tRNA)
+labels:
+  positive: ["CDS"]
+  negative: ["rRNA", "tRNA"]
+  exclude: []                   # e.g., ["misc_RNA"] if you want to drop them
+
+# Immutable splits (saved once and reused)
+splits:
+  strategy: "stratified"
+  by_accession: true            # prevents leakage across accessions
+  train: 0.70
+  val: 0.15
+  test: 0.15
+  saved_path: "data/metadata/splits.json"
+  random_seed: 42
+
+# Auto-augment if too small — pulls related chloroplasts in the same family
+augmentation:
+  enabled: true
+  min_windows: 2000             # trigger when Neem windows < this
+  taxonomy:
+    rank: "family"
+    name: "Meliaceae"
+  accessions: []                # optional hard list to force-include
+  limit: 5                      # max related accessions to fetch/process
+  tag_source: true              # keep accession tag per window for reporting
+
+# Encoded artifacts (filenames used by scripts)
+output_files:
+  windows_npy: "data/interim/windows.npy"
+  labels_npy: "data/interim/labels.npy"
+  kmer_prefix: "data/processed/kmer_k"       # -> kmer_k3.npy, etc.
+  onehot_prefix: "data/processed/onehot_L"   # -> onehot_L300.npy
+  angles_npy: "data/processed/angles.npy"
+
+logging:
+  level: "INFO"
+  log_file: "results/logs/data_pipeline.log"

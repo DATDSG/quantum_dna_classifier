@@ -1,0 +1,13 @@
+# Tracking config — MLflow + TensorBoard roots; local file store.
+mlflow:
+  experiment_name: "Neem-DNA-QML"
+  tracking_uri: "file:results/logs/mlruns"   # local file-backed store
+  tags:
+    project: "quantum_dna_classifier"
+    branch: "cpu-only"
+
+tensorboard:
+  root_dir: "results/logs/tensorboard"
+  subdirs:
+    cnn: "cnn"               # appended to root_dir
+    vqc: "vqc"               # appended to root_dir

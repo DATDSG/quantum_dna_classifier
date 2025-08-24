@@ -1,0 +1,47 @@
+LOCUS       PQ884112                 463 bp    DNA     linear   PLN 01-AUG-2025
+DEFINITION  Guarea kunthiana voucher RA090_90 trnH-psbA intergenic spacer,
+            partial sequence; chloroplast.
+ACCESSION   PQ884112
+VERSION     PQ884112.1
+KEYWORDS    .
+SOURCE      chloroplast Guarea kunthiana
+  ORGANISM  Guarea kunthiana
+            Eukaryota; Viridiplantae; Streptophyta; Embryophyta; Tracheophyta;
+            Spermatophyta; Magnoliopsida; eudicotyledons; Gunneridae;
+            Pentapetalae; rosids; malvids; Sapindales; Meliaceae; Guarea.
+REFERENCE   1  (bases 1 to 463)
+  AUTHORS   Watsa,M., Sanchez vendizu,P. and Erkenswick,G.
+  TITLE     Decoding the Peruvian Amazon with in situ DNA barcoding of
+            vertebrate and plant taxa
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 463)
+  AUTHORS   Watsa,M., Sanchez vendizu,P. and Erkenswick,G.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (15-JAN-2025) Population Sustainability, San Diego Zoo
+            Wildlife Alliance, 15600 San Pasqual Valley Road, Escondido, CA
+            92027, USA
+FEATURES             Location/Qualifiers
+     source          1..463
+                     /organism="Guarea kunthiana"
+                     /organelle="plastid:chloroplast"
+                     /mol_type="genomic DNA"
+                     /specimen_voucher="RA090_90"
+                     /db_xref="BOLD:MDPLT073-23.trnH-psbA"
+                     /db_xref="taxon:485821"
+                     /geo_loc_name="Peru: Madre de Dios, Tambopata, Tambopata,
+                     Inkaterra Reserva amazonica"
+                     /lat_lon="12.51 S 69.05 W"
+                     /collected_by="Varun Swamy"
+     misc_RNA        <1..>463
+                     /note="trnH-psbA intergenic spacer"
+ORIGIN      
+        1 ataacttccc tctagaccta gctgctattg aagctccatc tacaaatgga taagattttt
+       61 gtcttagtgt agacgagttt ttgaaaataa cagcgcgata ccgaccctct tgcaagaggg
+      121 tcggtatcgc gctgttattt agtaggtttt tctttagtag tttttatgta tatccttttt
+      181 tacgaaaaat attagttagg ttttaataac actaaaaatc gaattaataa aattcgattt
+      241 ttttttttat aattttataa taattttata gttaatttta tataaaagaa aagagaaagg
+      301 ttgtaatttt atgcctttta gatcttcact tctattttaa taaataagta agataaaaaa
+      361 ataatgatca gtggtacaaa ttgaaatctg aaatctttgt atttaaaatt ttgtaaattg
+      421 tggagcaatg gggggcggat gtagccaagt ggatcaaggc agt
+//
+

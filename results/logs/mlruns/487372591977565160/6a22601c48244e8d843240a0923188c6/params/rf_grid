@@ -1,0 +1,1 @@
+{"n_estimators": [200, 400], "max_depth": [null, 12, 24], "min_samples_leaf": [1, 2, 4], "max_features": ["sqrt"], "bootstrap": [true], "class_weight": ["balanced"]}

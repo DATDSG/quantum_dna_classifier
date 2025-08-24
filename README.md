@@ -1,61 +1,16 @@
-# 🧬 Quantum DNA Classifier
+# Hybrid Quantum–Classical DNA Classification (Neem Chloroplast)
 
-This repository contains the full research project for **"Comparative Analysis of Quantum and Classical Machine Learning for DNA Sequence Classification: A Case Study on _Azadirachta indica_"**, developed as part of the final year BSc (Honours) in Computer Science at NSBM Green University.
+Binary classification of chloroplast DNA windows (CDS vs rRNA/tRNA) centered on *Azadirachta indica* (GenBank KF986530.1). Reproducible, GPU-accelerated, and research-grade: classical (RBF-SVM, compact 1D-CNN) and quantum (QSVM, VQC) with device-realistic noise, MLflow/TensorBoard tracking, unit tests, and a modern Plotly Dash dashboard.
 
-## 📌 Project Overview
+## Why this repo
+- **Reproducibility**: pinned env (Conda/Docker), deterministic seeds, saved splits, MLflow/TensorBoard.
+- **Dual pipelines**: Classical baseline + quantum heads on identical folds.
+- **Robustness**: QASM Aer noise (readout/depolarizing), mitigation stubs, CIs via bootstrap/k-fold.
+- **Interpretability**: CNN saliency; single-qubit Bloch projections; circuit depth/gate/shot stats.
 
-This project aims to benchmark classical and quantum machine learning (QML) models on real genomic data. The chloroplast genome of *Azadirachta indica* (Neem) is used as the dataset to evaluate classification performance between traditional models (SVM, CNN, RF) and quantum models (VQC, QSVM).
+## Quickstart
 
-## 🚀 Features
-
-- DNA preprocessing and sequence encoding (k-mer, one-hot, hybrid)
-- Classical ML models: SVM, CNN, Random Forest (Scikit-learn, TensorFlow)
-- Quantum models: QSVM (Qiskit), VQC (PennyLane)
-- Model performance benchmarking: Accuracy, F1, AUC
-- Bloch sphere and gate-depth visualizations
-- MLflow/TensorBoard integration for tracking
-
-## 📁 Project Structure
-
-quantum_dna_classifier/
-├── data/
-├── notebooks/
-├── scripts/
-├── models/
-├── results/
-├── configs/
-├── docs/
-├── env/
-├── tests/
-├── README.md
-├── requirements.txt
-├── .gitignore
-├── LICENSE
-└── Makefile
-
-
-## 🛠️ Tech Stack
-
-- Python 3.11
-- Scikit-learn, TensorFlow
-- Qiskit, PennyLane
-- Biopython, NumPy, Pandas
-- MLflow, TensorBoard
-
-## 📚 Dataset
-
-- Source: NCBI GenBank
-- Accession: [KF986530.1](https://www.ncbi.nlm.nih.gov/nuccore/KF986530.1)
-- Format: FASTA + GenBank
-
-## 📦 Installation
-
+### 0) Clone & prepare
 ```bash
-git clone https://github.com/yourusername/quantum_dna_classifier.git
+git clone https://github.com/DATDSG/quantum_dna_classifier.git
 cd quantum_dna_classifier
-conda env create -f env/environment.yml
-conda activate quantum-dna-env
-
-make preprocess    # Encode and clean DNA data
-make train         # Train classical and quantum models
-make evaluate      # Benchmark & visualize results

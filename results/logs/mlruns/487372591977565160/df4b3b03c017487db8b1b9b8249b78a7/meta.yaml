@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/td123/OneDrive/Documents/GitHub/quantum_dna_classifier/results/logs/mlruns/487372591977565160/df4b3b03c017487db8b1b9b8249b78a7/artifacts
+end_time: 1756025193299
+entry_point_name: ''
+experiment_id: '487372591977565160'
+lifecycle_stage: active
+run_id: df4b3b03c017487db8b1b9b8249b78a7
+run_name: quantum_qsvm
+run_uuid: df4b3b03c017487db8b1b9b8249b78a7
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1756025186752
+status: 3
+tags: []
+user_id: td123

@@ -1,0 +1,13 @@
+{
+  "backend": "aer_simulator_statevector",
+  "shots": 2048,
+  "feature_dim": 4,
+  "pca_enabled": true,
+  "pca_n_components": 4,
+  "fmap_reps": 2,
+  "fmap_entanglement": "linear",
+  "kernel_center": true,
+  "kernel_reg_eps": 1e-10,
+  "noise_enabled": false,
+  "best_C": 1.0
+}

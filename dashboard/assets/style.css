@@ -1,0 +1,5 @@
+/* small readability tweaks for dark theme */
+.metric-label { font-size: 0.85rem; color: #bbb; }
+.metric-value { font-weight: 700; }
+.table-sm td, .table-sm th { padding: .3rem .5rem; }
+.card { margin-bottom: 0.75rem; }

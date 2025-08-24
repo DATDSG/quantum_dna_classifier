@@ -1,0 +1,9 @@
+{
+  "device": "lightning.qubit",
+  "wires": 4,
+  "layers": 2,
+  "entanglement": "linear",
+  "optimizer": "adam",
+  "lr": 0.02,
+  "shots": 0
+}

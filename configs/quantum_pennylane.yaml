@@ -1,0 +1,31 @@
+# PennyLane VQC — shallow, CPU device, analytic by default; saves params/preds.
+
+device:
+  name: default.qubit           
+  wires: 4                        # small (avoids barren plateau risk on CPU)
+  shots: null                     # null -> analytic simulation (fast on CPU)
+
+ansatz:
+  data_reupload_layers: 2
+  entanglement: linear
+  depth: 2                        # keep shallow; pipeline logs grad norms
+
+training:
+  optimizer: adam
+  lr: 0.02
+  batch_size: 64
+  epochs: 30
+  early_stop_patience: 5
+  log_grad_norms: true
+  weight_decay: 0.001   # L2 regularization
+  grad_clip: 0.0        # set >0 (e.g., 1.0) to clip global grad norm
+
+# Persist artifacts from the VQC run
+io:
+  save_dir: "models/vqc"
+  save_params: true               # params_<ts>.npy (θ) + vqc_config_<ts>.json
+  save_preds: true                # val_proba_<ts>.npy
+
+logging:
+  tensorboard_dir: "results/logs/tensorboard/vqc"
+  csv_dir: "results/logs/csv/vqc"

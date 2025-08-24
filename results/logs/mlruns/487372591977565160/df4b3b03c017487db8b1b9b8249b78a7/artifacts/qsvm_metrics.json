@@ -1,0 +1,10 @@
+{
+  "f1": 0.9640287769784173,
+  "roc_auc": 0.7313432835820894,
+  "n_features": 4,
+  "circuit_depth": 1,
+  "two_qubit_gates": 1,
+  "shots": 2048,
+  "kernel_cond_train": 780013717726.053,
+  "best_C": 1.0
+}

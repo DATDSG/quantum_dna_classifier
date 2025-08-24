@@ -1,0 +1,12 @@
+{
+  "device": "default.qubit",
+  "wires": 4,
+  "layers": 2,
+  "entanglement": "linear",
+  "optimizer": "adam",
+  "lr": 0.02,
+  "shots": 0,
+  "weight_decay": 0.001,
+  "grad_clip": 0.0,
+  "features": "embeddings"
+}

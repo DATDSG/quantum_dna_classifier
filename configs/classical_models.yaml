@@ -1,0 +1,49 @@
+# Classical models config — CPU-only, compact CNN, SVM grid w/ saving
+
+svm_rbf:
+  enabled: true
+  C: [0.5, 1.0, 2.0, 4.0]          # small but useful grid
+  gamma: ["scale", 0.1, 0.5, 1.0]  # include 'scale' plus numeric options
+  class_weight: "balanced"
+  cv_folds: 5
+  save: true                        # <- used by classical_pipeline.py to persist best model
+  save_dir: "models/svm"
+
+random_forest:
+  enabled: true
+  # small CPU-friendly search; all evaluated on the TRAIN split, scored on CV
+  n_estimators: [200, 400]
+  max_depth: [null, 12, 24]      # null -> no max depth
+  min_samples_leaf: [1, 2, 4]
+  max_features: ["sqrt"]         # robust default on tabular/k-mer
+  bootstrap: true
+  class_weight: "balanced"
+  cv_folds: 5
+
+  # persistence
+  save: true
+  save_dir: "models/rf"
+
+cnn:
+  enabled: true
+  # MUST match encoding.yaml -> one_hot.max_len to avoid shape errors
+  max_len: 256
+  channels: 4
+  # Keep model compact to avoid overfit; early stopping handles patience
+  conv_blocks: 2
+  filters: [32, 64]
+  kernel_sizes: [7, 5]
+  dropout: 0.3
+  dense_units: 32
+  lr: 0.001                         # parsed as float by pipeline
+  batch_size: 64
+  epochs: 30
+  early_stop_patience: 5
+  embeddings_output_dim: 16         # aligns with embeddings.out_dim in encoding.yaml
+  save_embeddings: true
+  tensorboard_dir: "results/logs/tensorboard/cnn"
+  # Ensure the CNN input matches the encoded tensor exactly
+  input_shape: [256, 4]             # <- consumed by build_cnn()
+  # Persist artifacts (checkpoint, history, val proba)
+  save: true
+  save_dir: "models/cnn"  

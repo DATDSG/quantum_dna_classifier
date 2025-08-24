@@ -1,0 +1,46 @@
+# Qiskit QSVM — manual kernel on CPU Aer; small feature map; artifacts saved.
+
+backend:
+  name: "aer_simulator_statevector"   # exact fidelity via statevector on CPU
+  shots: 2048                         # only used if non-statevector backend
+  # Optional transpile hints (ignored by statevector but safe to keep)
+  coupling_map: []                    # e.g., [[0,1],[1,2]]
+  basis_gates: []                     # e.g., ["cx","rz","sx","x"]
+  optimization_level: 1               # 0..3
+  layout_method: "sabre"
+  routing_method: "sabre"
+
+feature_map:
+  reps: 2
+  entanglement: linear
+
+# Dimensionality reduction before feature map (keeps circuits small on CPU)
+pca:
+  enabled: true
+  n_components: 4                     # <= wires you want to emulate
+
+kernel:
+  center: true
+  regularization_eps: 1.0e-10
+
+svm:
+  C: 1.0
+  class_weight: balanced
+  probability: true
+
+noise:
+  enabled: false
+  depolarizing:
+    one_qubit: 0.001
+    two_qubit: 0.01
+  readout_error:
+    prob0to1: 0.01
+    prob1to0: 0.01
+
+# Where to persist everything produced by the QSVM pipeline
+io:
+  save_dir: "models/qsvm"
+  save_kernel: true                   # saves K_train/K_val
+  save_pca: true                      # reserved (script reduces via PCA if enabled)
+  save_svc: true                      # saves fitted SVC
+  save_model: true                    # saves entire pipeline via joblib

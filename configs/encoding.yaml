@@ -1,0 +1,28 @@
+# Encoding config — deterministic and consistent with CNN input length.
+random_seed: 42
+
+kmer:
+  enabled: true
+  k: 3
+  normalize: tfidf        # options: l2 | tfidf | none
+  lowercase: false
+
+one_hot:
+  enabled: true
+  alphabet: ["A", "C", "G", "T"]
+  max_len: 300            # must equal cnn.max_len to avoid shape errors
+  pad_value: 0
+
+# Angles used by quantum pipelines (QSVM/VQC).
+angle_encoding:
+  source: kmer            # features come from k-mer by default
+  scale: pi               # map into [0, π]
+  reupload_layers: 2
+  feature_clip:
+    min: -3.0
+    max: 3.0
+
+embeddings:
+  enable_cnn_embeddings: true
+  out_dim: 16             # compact embedding for few-qubit circuits
+  save_path: "data/embeddings/cnn_embeddings.npy"

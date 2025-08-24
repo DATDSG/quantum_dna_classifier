@@ -1,0 +1,27 @@
+# Evaluation / reporting config — CIs + paths for metrics/plots.
+random_seed: 42
+
+save_dir:
+  metrics: "results/metrics"
+  plots:   "results/plots"
+
+metrics:
+  compute:
+    - accuracy
+    - precision
+    - recall
+    - f1
+    - roc_auc
+    - brier
+  calibration:
+    ece_bins: 15          # Expected Calibration Error bins
+
+confidence_intervals:
+  method: bootstrap       # fast + robust on CPU
+  n_bootstrap: 200        # adjust higher for tighter CIs (CPU cost)
+  seed: 42
+
+report:
+  dpi: 300
+  formats: ["html"]       # PNG export is best-effort in visualize.py
+  save_tables_csv: true
